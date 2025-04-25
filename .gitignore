@@ -1,1 +1,3 @@
 taskmanager/vTaskManager/
+taskmanager/__pycache__/
+taskmanager/app/__pycache__/

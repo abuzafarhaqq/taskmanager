@@ -37,7 +37,7 @@ Note: This project is not optional, it is a must to pass your exam.
 ```bash
 mkdir -p taskmanager/app/{static,templates}
 touch taskmanager/{docker-compose.yml,Dockerfile,init.sql}
-touch taskmanager/app/{__init__.py,app.py}
+touch taskmanager/app/{__init__.py,app.py,routes.py}
 touch taskmanager/app/static/style.css taskmanager/app/templates/index.html
 ```
 - now for the next task
