@@ -39,6 +39,7 @@ mkdir -p taskmanager/app/{static,templates}
 touch taskmanager/{docker-compose.yml,Dockerfile,init.sql}
 touch taskmanager/app/{__init__.py,app.py,routes.py}
 touch taskmanager/app/static/style.css taskmanager/app/templates/index.html
+touch taskmanager.py config.py
 ```
 - now for the next task
 
