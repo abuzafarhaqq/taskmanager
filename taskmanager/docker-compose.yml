@@ -1,0 +1,41 @@
+# version: '3.8'
+services:
+  db:
+    image: postgres:15-alpine  
+    environment:
+      POSTGRES_USER: taskadmin
+      POSTGRES_PASSWORD: taskAdminPass123!
+      POSTGRES_DB: taskmanager
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - taskmanager-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U taskadmin -d taskmanager"]  
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  web:
+    build: .
+    environment:
+      FLASK_ENV: production
+      DATABASE_URL: postgresql://taskadmin:taskAdminPass123!@db:5432/taskmanager
+      POSTGRES_USER: taskadmin
+      POSTGRES_PASSWORD: taskAdminPass123!
+      POSTGRES_DB: taskmanager
+    ports:
+      - "5000:5000"
+    volumes:
+      - .:/app
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - taskmanager-net
+
+volumes:
+  pgdata:
+
+networks:
+  taskmanager-net:
