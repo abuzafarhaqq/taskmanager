@@ -43,3 +43,86 @@ touch taskmanager.py config.py
 ```
 - now for the next task
 
+
+
+python package
+```python
+# Core  
+Flask-SQLAlchemy  # Database ORM  
+Flask-Migrate     # DB migrations (Alembic wrapper)  
+Flask-Login       # User session/auth  
+Flask-CORS        # API security (if frontend is separate)  
+python-dateutil   # Timezone handling  
+
+# Security  
+bcrypt            # Password hashing  
+Flask-Talisman    # HTTPS/security headers  
+Flask-Limiter     # Rate limiting (prevent brute-force)  
+
+# API/Dev  
+Flask-RESTX       # Swagger docs + API scaffolding  
+Flask-SocketIO    # Real-time sync (optional)  
+pytest-flask      # Testing framework  
+
+class Task(db.Model):  
+    id = db.Column(db.Integer, primary_key=True)  
+    title = db.Column(db.String(80), nullable=False)  
+    deadline = db.Column(db.DateTime(timezone=True))  
+    # Use `python-dateutil` for TZ conversions  
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))  
+    status = db.Column(db.Enum('todo', 'in_progress', 'done'))  
+
+# password hashing
+from bcrypt import hashpw, gensalt  
+hashed_pw = hashpw(user_password.encode(), gensalt())  
+
+# rate limiting
+from flask_limiter import Limiter  
+limiter = Limiter(app, key_func=get_remote_address)  
+@app.route("/api/tasks")  
+@limiter.limit("10/minute")  
+def get_tasks(): ...  
+
+# frontend decoupling, kill flaskwtf/jinja2: use react/vue.js for dynamic UI
+# Flask-RESTX for API
+from flask_restx import Api, Resource  
+api = Api(app)  
+@api.route('/tasks')  
+class TaskList(Resource):  
+    def get(self):  
+        return {'tasks': [task.serialize() for task in Task.query.all()]}  
+```
+
+```bash
+# Run this in your project root directory:  Launch the PostgreSQL Docker container
+docker run -d --name taskmanager-db -p 5432:5432 -e POSTGRES_USER=taskadmin -e POSTGRES_PASSWORD=taskAdminPass123! -e POSTGRES_DB=taskmanager -v pgdata:/var/lib/postgresql/data postgres:15-alpine
+
+# Verify:  
+docker ps -a | grep taskmanager-db  
+```
+
+```bash
+# First database Migration and Database Creation
+# Initialize migrations (run once):  
+flask db init  
+
+# Generate migration script:  
+flask db migrate -m "Initial tables: User, Task"  
+
+# Apply to PostgreSQL:  
+flask db upgrade  
+
+# Verify in PostgreSQL:
+docker exec -it taskmanager-db psql -U taskadmin -d taskmanager
+taskmanager=# \dt
+taskmanager=# \q
+```
+
+# Docker Compose Commands:
+```bash
+# for building use up --build, to remove use down
+doocker-compose up --build
+docker-compose down
+```
+
+
