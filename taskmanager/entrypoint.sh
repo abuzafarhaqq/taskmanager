@@ -7,6 +7,8 @@ until PGPASSWORD=$POSTGRES_PASSWORD psql -h "db" -U "$POSTGRES_USER" -d "$POSTGR
 done
 
 # Apply migrations
+flask db init
+flask db migrate -m "Initial migration: Users and Tasks"
 flask db upgrade
 
 # Start app

@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <img src="{{ user.avatar(32) }}" alt="User" width="32" height="32">
+  <h1>User: {{ user.username }}</h1>
+  <h1>Email: {{ user.email }}</h1>
+  <hr>
+  {% for task in tasks %}
+    <p>{{ task.status }}</p>
+    <p>{{ task.title }}</p>
+    <p>{{ task.description }}</p>
+  {% endfor %}
+{% endblock %}

@@ -44,7 +44,6 @@ touch taskmanager.py config.py
 - now for the next task
 
 
-
 python package
 ```python
 # Core  
@@ -104,13 +103,13 @@ docker ps -a | grep taskmanager-db
 ```bash
 # First database Migration and Database Creation
 # Initialize migrations (run once):  
-flask db init  
+flask db init
 
 # Generate migration script:  
-flask db migrate -m "Initial tables: User, Task"  
+flask db migrate -m "Initial tables: User, Task"
 
 # Apply to PostgreSQL:  
-flask db upgrade  
+flask db upgrade
 
 # Verify in PostgreSQL:
 docker exec -it taskmanager-db psql -U taskadmin -d taskmanager
@@ -125,4 +124,8 @@ doocker-compose up --build
 docker-compose down
 ```
 
+# Install Flask-Login: `pip install flask-login` and `pip freeze > requirements.txt`
 
+- Now we're creating for user login, registration, logout functions.
+- In `forms.py` we've an email validator function in the registration form comes from `email-validator` package.
+- Install `email-validator` package: `pip install email-validator` and `pip freeze > requirements.txt`

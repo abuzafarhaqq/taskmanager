@@ -12,7 +12,6 @@ RUN pip install --no-cache-dir -r requirements.txt \
 && chmod +x entrypoint.sh
 COPY . .
 
-
 # CMD ["flask","run"]
 
 ENTRYPOINT ["sh","entrypoint.sh"]
