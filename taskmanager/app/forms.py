@@ -1,9 +1,30 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField
-from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
+from wtforms import (
+    DateField,
+    StringField,
+    PasswordField,
+    BooleanField,
+    SubmitField,
+    TextAreaField,
+)
+from wtforms.validators import (
+    DataRequired,
+    Length,
+    Email,
+    EqualTo,
+    ValidationError,
+    Optional,
+)
 from app import db
 from app.models import User
 from werkzeug.security import generate_password_hash, check_password_hash
+
+
+class TaskForm(FlaskForm):
+    title = StringField("Title", validators=[DataRequired()])
+    deadline = DateField("Deadline", format="%Y-%m-%d", validators=[])
+    description = TextAreaField("Description", validators=[Optional()])
+    submit = SubmitField("Add Task")
 
 
 class LoginForm(FlaskForm):

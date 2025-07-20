@@ -5,7 +5,14 @@ from sqlalchemy.types import Text
 import sqlalchemy.orm as so
 from werkzeug.security import check_password_hash, generate_password_hash
 from flask_login import UserMixin
+import enum
 from app import db, login
+
+
+class TaskStatus(enum.Enum):
+    TODO = "todo"
+    IN_PROGRESS = "in_progress"
+    DONE = "done"
 
 
 class User(UserMixin, db.Model):
@@ -14,7 +21,7 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(128), unique=True, nullable=False, index=True)
     email = db.Column(db.String(128), unique=True, nullable=False, index=True)
     password_hash = db.Column(db.Text, nullable=False)
-    tasks = so.relationship("Task", backref="author", lazy="dynamic")
+    tasks = so.relationship("Task", backref="users", lazy="dynamic")
 
     def get_id(self):
         return str(self.id)
@@ -37,9 +44,20 @@ class Task(db.Model):
     __tablename__ = "tasks"
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(140))
-    description = db.Column(db.Text)
-    status = db.Column(db.String(32), default="todo")
-    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    deadline = db.Column(db.DateTime(timezone=True), nullable=True)
+    status = db.Column(db.Enum(TaskStatus), default=TaskStatus.TODO, nullable=False)
+    description = db.Column(db.Text, nullable=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "title": self.title,
+            "deadline": self.deadline.isoformat() if self.deadline else None,
+            "description": self.description,
+            "status": self.status.value,
+            "user_id": self.user_id,
+        }
 
     def __repr__(self):
         return f"<Task {self.title}>"

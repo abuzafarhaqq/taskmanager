@@ -1,0 +1,31 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+}
+
+nav a {
+  margin-right: 10px;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+th {
+  backgroud-color: #f2f2f2;
+}
+
+td:nth-child(4) { /* Description Column */
+  max-width: 300px; /* Limit Width */
+  word-wrap: break-word; /* Wrap long text*/
+}
+
+.sucess { color: green; }
+.error { color: red; }
