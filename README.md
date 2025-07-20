@@ -120,7 +120,7 @@ taskmanager=# \q
 # Docker Compose Commands:
 ```bash
 # for building use up --build, to remove use down
-doocker-compose up --build
+docker-compose up --build
 docker-compose down
 ```
 
@@ -129,3 +129,7 @@ docker-compose down
 - Now we're creating for user login, registration, logout functions.
 - In `forms.py` we've an email validator function in the registration form comes from `email-validator` package.
 - Install `email-validator` package: `pip install email-validator` and `pip freeze > requirements.txt`
+
+
+
+
