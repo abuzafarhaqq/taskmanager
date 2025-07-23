@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %} Homepage {% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block content %}
+  <h5>Welcome, {{ current_user.email }}</h5>
+  <h3>Your Tasks</h3>
+  <table>
+    <tr>
+      <th>Title</th>
+      <th>Deadline</th>
+      <th>Status</th>
+      <th>Description</th>
+      <th>Actions</th>
+    </tr>
+    {% for task in tasks %}
+    <tr>
+      <td>{{ task.title }}</td>
+      <td>{{ task.deadline.strftime("%Y-%m-%d") if task.deadline else "No deadline" }}</td>
+      <td>{{ task.status.value }}</td>
+      <td>{{ task.description if task.description else "No Description" }}</td>
+      <td>
+        {% if task.status != "done" %}
+          <a href="{{ url_for("complete_task", task_id=task.id) }}">Complete</a>
+        {% endif %}
+        <a href="{{ url_for("delete_task", task_id=task.id)}}">Delete</a>
+      </td>
+    </tr>
+    {% endfor %}
+    </table>
+{% endblock %}
