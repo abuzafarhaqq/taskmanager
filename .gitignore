@@ -1,5 +1,5 @@
-taskmanager/vTaskManager/
-taskmanager/__pycache__/
-taskmanager/app/__pycache__/
-taskmanager/pyrightconfig.json
+vTaskManager/
+__pycache__/
+app/__pycache__/
+pyrightconfig.json
 migrations/
