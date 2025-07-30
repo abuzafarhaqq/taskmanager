@@ -130,6 +130,7 @@ docker-compose down
 - In `forms.py` we've an email validator function in the registration form comes from `email-validator` package.
 - Install `email-validator` package: `pip install email-validator` and `pip freeze > requirements.txt`
 
-
+# Arch linux gives me some weird bug
+[[SOLVED - No internet connectivity in Docker containers](https://bbs.archlinux.org/viewtopic.php?id=274591)
 
 
