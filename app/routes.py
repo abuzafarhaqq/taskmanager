@@ -3,11 +3,13 @@ from flask import render_template, flash, redirect, url_for, request
 from urllib.parse import urlsplit
 from flask_login import current_user, login_user, logout_user, login_required
 from flask_restx import Resource, Api, fields
+from flask_restx.inputs import email
 from app import taskmanager, db, api, limiter
-from app.forms import LoginForm, RegistrationForm, TaskForm
+from app.forms import LoginForm, RegistrationForm, TaskForm, EditTaskForm
 from app.models import User, Task, TaskStatus
 import bcrypt
 from datetime import datetime
+from email_validator import EmailNotValidError
 
 
 @taskmanager.route("/")
@@ -52,6 +54,25 @@ def complete_task(task_id):
     return redirect(url_for("index"))
 
 
+@taskmanager.route("/edit/<int:task_id>/", methods=["GET", "POST"])
+@login_required
+def edit_task(task_id):
+    task = Task.query.get_or_404(task_id)
+    if task.user_id != current_user.id:
+        flash("Unauthorized action", "error")
+        return redirect("index")
+    form = EditTaskForm(obj=task)
+    if form.validate_on_submit():
+        task.title = form.title.data
+        task.description = form.description.data
+        task.deadline = form.deadline.data
+        task.status = TaskStatus(form.status.data) if form.status.data else task.status
+        db.session.commit()
+        flash("Task Updated successfully!", "success")
+        return redirect(url_for("index"))
+    return render_template("edit_task.html", form=form, task=task)
+
+
 @taskmanager.route("/delete/<int:task_id>/")
 @login_required
 def delete_task(task_id):
@@ -92,12 +113,18 @@ def register():
         return redirect(url_for("index"))
     form = RegistrationForm()
     if form.validate_on_submit():
-        user = User(username=form.username.data, email=form.email.data)
-        user.set_password(form.password.data)
-        db.session.add(user)
-        db.session.commit()
-        flash("Congratulations, you are now a registered user!")
-        return redirect(url_for("login"))
+        try:
+            if User.query.filter_by(email=form.email.data).first():
+                flash("Email already registered!", "error")
+                return redirect(url_for("register"))
+            user = User(username=form.username.data, email=form.email.data)
+            user.set_password(form.password.data)
+            db.session.add(user)
+            db.session.commit()
+            flash("Congratulations, you are now a registered user!")
+            return redirect(url_for("login"))
+        except EmailNotValidError:
+            flash("Invalid email address", "error")
     return render_template("register.html", title="Register Account", form=form)
 
 

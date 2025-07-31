@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %} Edit task {% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+
+{% block content %}
+  <h1>Edit Task</h1>
+  <form method="POST">
+    {{ form.hidden_tag() }}
+    <label for="title">Title</label>
+    {{ form.title(id="title") }}<br>
+    {% if form.title.errors %}
+      <span class="error">{{ form.title.errors[0] }}</span><br>
+    {% endif %}
+    <label for="deadline">Deadline (YYYY-MM-DD)</label>
+    {{ form.deadline(id='deadline') }}<br>
+    {% if form.deadline.errors %}
+      <span class="error">{{ form.deadline.errors[0] }}</span><br>
+    {% endif %}
+    <label for="description">Description:</label>
+    {{ form.description(id='description') }}<br>
+    {% if form.description.errors %}
+      <span class="error">{{ form.description.errors[0] }}</span><br>
+    {% endif %}
+    <label for="status">Status:</label>
+    {{ form.status(id='status') }}<br>
+    {% if form.status.errors %}
+      <span class="error">{{ form.status.errors[0] }}</span><br>
+    {% endif %}
+    <br>
+    {{ form.submit() }}
+  </form>
+{% endblock %}

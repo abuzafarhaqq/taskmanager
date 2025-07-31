@@ -1,6 +1,8 @@
 from flask_wtf import FlaskForm
+from sqlalchemy import Select
 from wtforms import (
     DateField,
+    SelectField,
     StringField,
     PasswordField,
     BooleanField,
@@ -16,7 +18,7 @@ from wtforms.validators import (
     Optional,
 )
 from app import db
-from app.models import User
+from app.models import User, TaskStatus
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
@@ -24,7 +26,26 @@ class TaskForm(FlaskForm):
     title = StringField("Title", validators=[DataRequired()])
     deadline = DateField("Deadline", format="%Y-%m-%d", validators=[])
     description = TextAreaField("Description", validators=[Optional()])
+    status = SelectField(
+        "Status",
+        choices=[(s.value, s.value) for s in TaskStatus],
+        default=TaskStatus.TODO.value,
+        validators=[Optional()],
+    )
     submit = SubmitField("Add Task")
+
+
+class EditTaskForm(FlaskForm):
+    title = StringField("Title", validators=[DataRequired()])
+    deadline = DateField("Deadline", format="%Y-%m-%d", validators=[])
+    description = TextAreaField("Description", validators=[Optional()])
+    status = SelectField(
+        "Status",
+        choices=[(s.value, s.value) for s in TaskStatus],
+        default=TaskStatus.TODO.value,
+        validators=[Optional()],
+    )
+    submit = SubmitField("Edit Task")
 
 
 class LoginForm(FlaskForm):

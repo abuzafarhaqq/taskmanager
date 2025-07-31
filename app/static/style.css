@@ -27,5 +27,9 @@ td:nth-child(4) { /* Description Column */
   word-wrap: break-word; /* Wrap long text*/
 }
 
-.sucess { color: green; }
+.success { color: green; }
 .error { color: red; }
+textarea {
+  width: 100%;
+  height: 100px;
+}
