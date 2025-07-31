@@ -16,8 +16,10 @@ from email_validator import EmailNotValidError
 @taskmanager.route("/index/")
 @login_required
 def index():
-    tasks = Task.query.filter_by(user_id=current_user.id).all()
-    return render_template("index.html", title="Home Page", tasks=tasks)
+    if current_user.is_authenticated:
+        tasks = Task.query.filter_by(user_id=current_user.id).all()
+        return render_template("index.html", title="Home Page", tasks=tasks)
+    return redirect(url_for("login"))
 
 
 @taskmanager.route("/add/", methods=["GET", "POST"])
@@ -156,7 +158,7 @@ task_model = api.model(
 )
 
 
-@api.route("/api/tasks")
+@api.route("/tasks")
 class TaskList(Resource):
     @login_required
     @limiter.limit("100/minute")
@@ -184,7 +186,7 @@ class TaskList(Resource):
         return task_serialize(), 201
 
 
-@api.route("/api/tasks/<int:task_id>")
+@api.route("/tasks/<int:task_id>")
 class TaskResource(Resource):
     @login_required
     @api.marshal_with(task_model)
