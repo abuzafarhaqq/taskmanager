@@ -4,7 +4,6 @@
   {{ super() }}
 {% endblock %}
 {% block content %}
-  <h5>Welcome, {{ current_user.email }}</h5>
   <h3>Your Tasks</h3>
   <table>
     <tr>
@@ -21,6 +20,7 @@
       <td>{{ task.status.value }}</td>
       <td>{{ task.description if task.description else "No Description" }}</td>
       <td>
+        <a href="{{ url_for("edit_task", task_id=task.id) }}">Edit</a>
         {% if task.status != "done" %}
           <a href="{{ url_for("complete_task", task_id=task.id) }}">Complete</a>
         {% endif %}

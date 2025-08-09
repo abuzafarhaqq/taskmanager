@@ -3,19 +3,23 @@ from flask import render_template, flash, redirect, url_for, request
 from urllib.parse import urlsplit
 from flask_login import current_user, login_user, logout_user, login_required
 from flask_restx import Resource, Api, fields
+from flask_restx.inputs import email
 from app import taskmanager, db, api, limiter
-from app.forms import LoginForm, RegistrationForm, TaskForm
+from app.forms import LoginForm, RegistrationForm, TaskForm, EditTaskForm
 from app.models import User, Task, TaskStatus
 import bcrypt
 from datetime import datetime
+from email_validator import EmailNotValidError
 
 
 @taskmanager.route("/")
 @taskmanager.route("/index/")
 @login_required
 def index():
-    tasks = Task.query.filter_by(user_id=current_user.id).all()
-    return render_template("index.html", title="Home Page", tasks=tasks)
+    if current_user.is_authenticated:
+        tasks = Task.query.filter_by(user_id=current_user.id).all()
+        return render_template("index.html", title="Home Page", tasks=tasks)
+    return redirect(url_for("login"))
 
 
 @taskmanager.route("/add/", methods=["GET", "POST"])
@@ -50,6 +54,25 @@ def complete_task(task_id):
     db.session.commit()
     flash("Task marked as completed!", "success")
     return redirect(url_for("index"))
+
+
+@taskmanager.route("/edit/<int:task_id>/", methods=["GET", "POST"])
+@login_required
+def edit_task(task_id):
+    task = Task.query.get_or_404(task_id)
+    if task.user_id != current_user.id:
+        flash("Unauthorized action", "error")
+        return redirect("index")
+    form = EditTaskForm(obj=task)
+    if form.validate_on_submit():
+        task.title = form.title.data
+        task.description = form.description.data
+        task.deadline = form.deadline.data
+        task.status = TaskStatus(form.status.data) if form.status.data else task.status
+        db.session.commit()
+        flash("Task Updated successfully!", "success")
+        return redirect(url_for("index"))
+    return render_template("edit_task.html", form=form, task=task)
 
 
 @taskmanager.route("/delete/<int:task_id>/")
@@ -92,12 +115,18 @@ def register():
         return redirect(url_for("index"))
     form = RegistrationForm()
     if form.validate_on_submit():
-        user = User(username=form.username.data, email=form.email.data)
-        user.set_password(form.password.data)
-        db.session.add(user)
-        db.session.commit()
-        flash("Congratulations, you are now a registered user!")
-        return redirect(url_for("login"))
+        try:
+            if User.query.filter_by(email=form.email.data).first():
+                flash("Email already registered!", "error")
+                return redirect(url_for("register"))
+            user = User(username=form.username.data, email=form.email.data)
+            user.set_password(form.password.data)
+            db.session.add(user)
+            db.session.commit()
+            flash("Congratulations, you are now a registered user!")
+            return redirect(url_for("login"))
+        except EmailNotValidError:
+            flash("Invalid email address", "error")
     return render_template("register.html", title="Register Account", form=form)
 
 
@@ -129,7 +158,7 @@ task_model = api.model(
 )
 
 
-@api.route("/api/tasks")
+@api.route("/tasks")
 class TaskList(Resource):
     @login_required
     @limiter.limit("100/minute")
@@ -157,7 +186,7 @@ class TaskList(Resource):
         return task_serialize(), 201
 
 
-@api.route("/api/tasks/<int:task_id>")
+@api.route("/tasks/<int:task_id>")
 class TaskResource(Resource):
     @login_required
     @api.marshal_with(task_model)
