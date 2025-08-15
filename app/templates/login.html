@@ -1,27 +1,34 @@
 {% extends "base.html" %}
+{% block title %}Sign In{% endblock %}
 
 {% block content %}
-  <h1>Sign In</h1>
-  <form method="POST" action="" novalidate>
+  <h1 class="text-3xl font-bold mb-6">Sign In</h1>
+  <form method="POST" action="" novalidate class="max-w-md mx-auto bg-white p-6 rounded shadow">
     {{ form.hidden_tag() }}
-    <div>
-      {{ form.username.label }}<br>
-      {{ form.username(size=32) }}
+
+    <div class="mb-4">
+      {{ form.username.label(class="block font-semibold mb-1") }}
+      {{ form.username(class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400") }}
       {% for error in form.username.errors %}
-        <span class="error">{{ error }}</span>
+        <p class="text-red-600 text-sm mt-1">{{ error }}</p>
       {% endfor %}
     </div>
-    <div>
-      {{ form.password.label }}<br>
-      {{ form.password(size=32) }}
+
+    <div class="mb-4">
+      {{ form.password.label(class="block font-semibold mb-1") }}
+      {{ form.password(class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400") }}
       {% for error in form.password.errors %}
-        <span class="error">{{ error }}</span>
+        <p class="text-red-600 text-sm mt-1">{{ error }}</p>
       {% endfor %}
     </div>
+
+    <div class="mb-4 flex items-center space-x-2">
       {{ form.remember_me() }}
-      {{ form.remember_me.label }}
-      {{ form.submit() }}
+      {{ form.remember_me.label(class="select-none") }}
+    </div>
+
+    <div>
+      {{ form.submit(class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded cursor-pointer") }}
+    </div>
   </form>
 {% endblock %}
-
-<!-- <span style="color:red;"> -->

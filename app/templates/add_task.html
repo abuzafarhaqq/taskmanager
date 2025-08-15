@@ -1,34 +1,38 @@
 {% extends "base.html" %}
-{% block title %} Add task {% endblock %}
-{% block head %}
-  {{ super() }}
-{% endblock %}
+{% block title %}Add task{% endblock %}
 
 {% block content %}
-  <h1>Add Task</h1>
-  <form method="POST">
+  <h1 class="text-3xl font-bold mb-6">Add Task</h1>
+  <form method="POST" class="bg-white p-6 rounded shadow max-w-lg mx-auto">
     {{ form.hidden_tag() }}
-    <div>
-      {{ form.title.label }}<br>
-      {{ form.title(id="title") }}
+
+    <div class="mb-4">
+      {{ form.title.label(class="block font-semibold mb-1") }}
+      {{ form.title(class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400") }}
       {% for error in form.title.errors %}
-        <span class="error">{{ error }}</span>
+        <p class="text-red-600 text-sm mt-1">{{ error }}</p>
       {% endfor %}
     </div>
-    <div>
-      {{ form.deadline.label }}<br>
-      {{ form.deadline(id="deadline") }}
+
+    <div class="mb-4">
+      {{ form.deadline.label(class="block font-semibold mb-1") }}
+      {{ form.deadline(class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400") }}
       {% for error in form.deadline.errors %}
-        <span class="error">{{ error }}</span>
+        <p class="text-red-600 text-sm mt-1">{{ error }}</p>
       {% endfor %}
     </div>
-    <div>
-      {{ form.description.label }}<br>
-      {{ form.description(id="description") }}
+
+    <div class="mb-4">
+      {{ form.description.label(class="block font-semibold mb-1") }}
+      {{ form.description(class="w-full border border-gray-300 rounded px-3 py-2 h-24 resize-none focus:outline-none focus:ring-2 focus:ring-blue-400") }}
       {% for error in form.description.errors %}
-        <span class="error">{{ error }}</span>
+        <p class="text-red-600 text-sm mt-1">{{ error }}</p>
       {% endfor %}
     </div>
-      {{ form.submit() }}
+
+    <div>
+      {{ form.submit(class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded cursor-pointer") }}
+    </div>
   </form>
 {% endblock %}
+

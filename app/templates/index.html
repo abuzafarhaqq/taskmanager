@@ -1,32 +1,35 @@
 {% extends "base.html" %}
-{% block title %} Homepage {% endblock %}
-{% block head %}
-  {{ super() }}
-{% endblock %}
+{% block title %}Homepage{% endblock %}
+
 {% block content %}
-  <h3>Your Tasks</h3>
-  <table>
-    <tr>
-      <th>Title</th>
-      <th>Deadline</th>
-      <th>Status</th>
-      <th>Description</th>
-      <th>Actions</th>
-    </tr>
-    {% for task in tasks %}
-    <tr>
-      <td>{{ task.title }}</td>
-      <td>{{ task.deadline.strftime("%Y-%m-%d") if task.deadline else "No deadline" }}</td>
-      <td>{{ task.status.value }}</td>
-      <td>{{ task.description if task.description else "No Description" }}</td>
-      <td>
-        <a href="{{ url_for("edit_task", task_id=task.id) }}">Edit</a>
-        {% if task.status != "done" %}
-          <a href="{{ url_for("complete_task", task_id=task.id) }}">Complete</a>
-        {% endif %}
-        <a href="{{ url_for("delete_task", task_id=task.id)}}">Delete</a>
-      </td>
-    </tr>
-    {% endfor %}
-    </table>
+  <h3 class="text-xl font-semibold mb-4">Your Tasks</h3>
+  <table class="min-w-full border border-gray-300 rounded overflow-hidden">
+    <thead class="bg-gray-200">
+      <tr>
+        <th class="border border-gray-300 px-4 py-2 text-left">Title</th>
+        <th class="border border-gray-300 px-4 py-2 text-left">Deadline</th>
+        <th class="border border-gray-300 px-4 py-2 text-left">Status</th>
+        <th class="border border-gray-300 px-4 py-2 text-left max-w-xs break-words">Description</th>
+        <th class="border border-gray-300 px-4 py-2 text-left">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for task in tasks %}
+      <tr class="even:bg-gray-50">
+        <td class="border border-gray-300 px-4 py-2">{{ task.title }}</td>
+        <td class="border border-gray-300 px-4 py-2">{{ task.deadline.strftime("%Y-%m-%d") if task.deadline else "No deadline" }}</td>
+        <td class="border border-gray-300 px-4 py-2">{{ task.status.value }}</td>
+        <td class="border border-gray-300 px-4 py-2">{{ task.description if task.description else "No Description" }}</td>
+        <td class="border border-gray-300 px-4 py-2 space-x-2">
+          <a href="{{ url_for('edit_task', task_id=task.id) }}" class="text-blue-600 hover:underline">Edit</a>
+          {% if task.status != "done" %}
+            <a href="{{ url_for('complete_task', task_id=task.id) }}" class="text-green-600 hover:underline">Complete</a>
+          {% endif %}
+          <a href="{{ url_for('delete_task', task_id=task.id) }}" class="text-red-600 hover:underline">Delete</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 {% endblock %}
+
