@@ -27,6 +27,51 @@ Build a Flask-based API where Nure can:
 Create a video of your project and submit the Video link in the Discord group. Please explain how it works.
 Note: This project is not optional, it is a must to pass your exam.
 
+# Our New Target
+---
+1. Basic Web Application with Docker ✅
+  - Containerized a Flask/Node.js application.
+  - Write a simple Dockerfile.
+  - Running a containerized application
+2. Multi-Containerized Application with Docker Compose ✅
+  - Setting up multiple services (Web + Database)
+  - Writing a docker-compose.yml file
+  - Networking between containers
+3. Persistent Data Storage with Docker Volumes
+  - Using named and bind mounts for data persistence
+  - Running a MySQL/PostgreSQL container with persistent storage
+  - Managing and inspecting Docker volumes
+4. Docker Networking: Communication Between Containers
+  - Creating and managing Docker networks
+  - Linking containers within a network
+  - Setting up a custom bridge network
+5. Scaling Applications with Docker Swarm
+  - Initializing and managing a Swarm cluster
+  - Deploying services in a Swarm
+  - Load balancing between multiple containers
+6. Secure Docker Deployment with Traefik and Let's Encrypt
+  - Configuring Traefik as a reverse proxy
+  - Enabling HTTPS with Let's Encrypt
+  - Adding Basic Authentication for security
+7. Scalable Microservices Architecture with Docker and Kubernetes
+  - Creating multiple microservices
+  - Deploying services using Kubernetes
+  - Setting up an API Gateway for routing
+8. Continuous Integration & Deployment (CI/CD) for Dockerized Applications
+  - Automating builds with GitHub Actions / Jenkins
+  - Pushing images to Docker Hub
+  - Deploying to a remote server or Kubernetes
+9. Multi-Stage Docker Build for Optimized Production Deployment
+  - Using multi-stage builds to reduce image size
+  - Running the app with Gunicorn for better performance
+  - Setting up an Nginx reverse proxy
+10. Optimized Docker Image Deployment with Kubernetes
+  - Deploying the optimized Docker image to Kubernetes
+  - Using ConfigMaps and Secrets for environment variables
+  - Scaling services efficiently
+
+
+
 **Working procedure**:
 - Create working directory: `mkdir task-manager-for-bongodev`
 - Initialize git: `git init .` and create a **README.md** and **.gitignore** file for working procedure `touch README.md .gitignore`
