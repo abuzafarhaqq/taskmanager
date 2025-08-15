@@ -18,7 +18,9 @@ from email_validator import EmailNotValidError
 def index():
     if current_user.is_authenticated:
         tasks = Task.query.filter_by(user_id=current_user.id).all()
-        return render_template("index.html", title="Home Page", tasks=tasks)
+        return render_template(
+            "index.html", title="Home Page", user=current_user, tasks=tasks
+        )
     return redirect(url_for("login"))
 
 
@@ -40,7 +42,7 @@ def add_task():
             flash("Task added successfully", "success")
             return redirect(url_for("index"))
         flash("Task add failed", "error")
-    return render_template("add_task.html", form=form)
+    return render_template("add_task.html", form=form, user=current_user)
 
 
 @taskmanager.route("/complete/<int:task_id>")
@@ -72,7 +74,7 @@ def edit_task(task_id):
         db.session.commit()
         flash("Task Updated successfully!", "success")
         return redirect(url_for("index"))
-    return render_template("edit_task.html", form=form, task=task)
+    return render_template("edit_task.html", form=form, task=task, user=current_user)
 
 
 @taskmanager.route("/delete/<int:task_id>/")

@@ -1,34 +1,46 @@
 {% extends "base.html" %}
-{% block title %} Edit task {% endblock %}
-{% block head %}
-  {{ super() }}
-{% endblock %}
+{% block title %}Edit task{% endblock %}
 
 {% block content %}
-  <h1>Edit Task</h1>
-  <form method="POST">
+  <h1 class="text-3xl font-bold mb-6">Edit Task</h1>
+  <form method="POST" class="bg-white p-6 rounded shadow max-w-lg mx-auto">
     {{ form.hidden_tag() }}
-    <label for="title">Title</label>
-    {{ form.title(id="title") }}<br>
-    {% if form.title.errors %}
-      <span class="error">{{ form.title.errors[0] }}</span><br>
-    {% endif %}
-    <label for="deadline">Deadline (YYYY-MM-DD)</label>
-    {{ form.deadline(id='deadline') }}<br>
-    {% if form.deadline.errors %}
-      <span class="error">{{ form.deadline.errors[0] }}</span><br>
-    {% endif %}
-    <label for="description">Description:</label>
-    {{ form.description(id='description') }}<br>
-    {% if form.description.errors %}
-      <span class="error">{{ form.description.errors[0] }}</span><br>
-    {% endif %}
-    <label for="status">Status:</label>
-    {{ form.status(id='status') }}<br>
-    {% if form.status.errors %}
-      <span class="error">{{ form.status.errors[0] }}</span><br>
-    {% endif %}
-    <br>
-    {{ form.submit() }}
+
+    <div class="mb-4">
+      {{ form.title.label(class="block font-semibold mb-1") }}
+      {{ form.title(class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400") }}
+      {% if form.title.errors %}
+        <p class="text-red-600 text-sm mt-1">{{ form.title.errors[0] }}</p>
+      {% endif %}
+    </div>
+
+    <div class="mb-4">
+      {{ form.deadline.label(class="block font-semibold mb-1") }}
+      {{ form.deadline(class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400") }}
+      {% if form.deadline.errors %}
+        <p class="text-red-600 text-sm mt-1">{{ form.deadline.errors[0] }}</p>
+      {% endif %}
+    </div>
+
+    <div class="mb-4">
+      {{ form.description.label(class="block font-semibold mb-1") }}
+      {{ form.description(class="w-full border border-gray-300 rounded px-3 py-2 h-24 resize-none focus:outline-none focus:ring-2 focus:ring-blue-400") }}
+      {% if form.description.errors %}
+        <p class="text-red-600 text-sm mt-1">{{ form.description.errors[0] }}</p>
+      {% endif %}
+    </div>
+
+    <div class="mb-6">
+      {{ form.status.label(class="block font-semibold mb-1") }}
+      {{ form.status(class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400") }}
+      {% if form.status.errors %}
+        <p class="text-red-600 text-sm mt-1">{{ form.status.errors[0] }}</p>
+      {% endif %}
+    </div>
+
+    <div>
+      {{ form.submit(class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded cursor-pointer") }}
+    </div>
   </form>
 {% endblock %}
+
