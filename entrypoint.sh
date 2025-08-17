@@ -20,13 +20,14 @@ until psql "$DATABASE_URL" -c '\q' 2>/dev/null; do
 done
 echo "Postgres is up!"
 
-# Apply migrations safely
-if [ ! -f "/app/migrations/.migrations_done" ]; then
-  echo "Applying database migrations..."
-  flask db upgrade
-  mkdir -p /app/migrations
-  touch /app/migrations/.migrations_done
+# Ensure migrations folder exists
+if [ ! -d "migrations" ]; then
+  flask db init
 fi
+
+# Apply migrations safely
+flask db migrate -m "Auto migration"
+flask db upgrade
 
 # Start Gunicorn
 exec gunicorn -b 0.0.0.0:5000 --access-logfile - --error-logfile - taskmanager:taskmanager
