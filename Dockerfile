@@ -28,4 +28,3 @@ RUN chmod +x entrypoint.sh
 COPY . .
 
 ENTRYPOINT ["sh", "entrypoint.sh"]
-

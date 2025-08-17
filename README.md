@@ -70,6 +70,46 @@ Note: This project is not optional, it is a must to pass your exam.
   - Using ConfigMaps and Secrets for environment variables
   - Scaling services efficiently
 
+You can run full stack using: `docker-compose.yml`:
+```bash
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: taskadmin
+      POSTGRES_PASSWORD: taskAdminPass123!
+      POSTGRES_DB: taskmanager
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - taskmanager-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U taskadmin -d taskmanager"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  web:
+    image: abuzafarhaqq/taskmanager:main   # pull your Docker Hub image
+    environment:
+      DATABASE_URL: postgresql://taskadmin:taskAdminPass123!@db:5432/taskmanager
+      FLASK_ENV: production
+    ports:
+      - "5000:5000"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - taskmanager-net
+
+volumes:
+  pgdata:
+
+networks:
+  taskmanager-net:
+```
 
 
 **Working procedure**:
